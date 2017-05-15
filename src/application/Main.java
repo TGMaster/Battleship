@@ -32,7 +32,7 @@ import javafx.scene.image.ImageView;
 public class Main extends Application implements Battleship {
 	Board player1, player2;
 
-	MediaPlayer mediaPlayer;
+	MediaPlayer shipPlayer, startPlayer, wonPlayer, lostPlayer;
 
 	private boolean isWon = false;
 	private boolean createdship = false;
@@ -45,13 +45,31 @@ public class Main extends Application implements Battleship {
 		root.setPrefSize(800, 600);
 		root.setPadding(new Insets(20)); // khoảng cách khung application
 
+		
+		// Music
 		String ship_sound = "sound/ship.mp3";
+		String start_sound = "sound/start.mp3";
+		String won_sound = "sound/won.mp3";
+		String lost_sound = "sound/lost.mp3";
 		Media ship_mp3 = new Media(new File(ship_sound).toURI().toString());
-		mediaPlayer = new MediaPlayer(ship_mp3);
-		if (!Menu.isMute) mediaPlayer.play();
-		mediaPlayer.setVolume(0.5);
-		mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-
+		Media start_mp3 = new Media(new File(start_sound).toURI().toString());
+		Media won_mp3 = new Media(new File(won_sound).toURI().toString());
+		Media lost_mp3 = new Media(new File(lost_sound).toURI().toString());
+		shipPlayer = new MediaPlayer(ship_mp3);
+		startPlayer = new MediaPlayer(start_mp3);
+		wonPlayer = new MediaPlayer(won_mp3);
+		lostPlayer = new MediaPlayer(lost_mp3);
+		
+		if (!Menu.isMute) shipPlayer.play();
+		shipPlayer.setVolume(0.5);
+		shipPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+		startPlayer.setVolume(0.5);
+		startPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+		wonPlayer.setVolume(0.5);
+		lostPlayer.setVolume(0.5);
+		
+		
+		// Background
 		InputStream is = Files.newInputStream(Paths.get(("img/main.jpg")));
 		Image img = new Image(is);
 		is.close();
@@ -79,7 +97,7 @@ public class Main extends Application implements Battleship {
 		player1 = new Board(true, sukien -> {
 			if (isWon)
 				return;
-
+			
 			if (!createdship)
 				return;
 
@@ -91,6 +109,10 @@ public class Main extends Application implements Battleship {
 			Board.Fade(ovuong);
 
 			if (player1.ships == 0) {
+				if (!Menu.isMute) {
+					startPlayer.stop();
+					wonPlayer.play();
+				}
 				ShowMessage("CONGRATULATION!!! YOU HAVE WON THE GAME");
 				isWon = true;
 			}
@@ -111,6 +133,10 @@ public class Main extends Application implements Battleship {
 			if (player2.CreateShip(new Ship(sotau, sukien.getButton() == MouseButton.PRIMARY), ovuong.x, ovuong.y)) {
 				if (--sotau == 0) { // minus first to compare
 					CreateShipForAI();
+					if (!Menu.isMute) {
+						shipPlayer.stop();
+						startPlayer.play();
+					}
 				}
 			}
 		});
@@ -120,7 +146,7 @@ public class Main extends Application implements Battleship {
 		VBox center = new VBox(player, Board);
 		root.setCenter(center);
 
-		// Close button
+		// Return button
 		MenuButton btnReturn = new MenuButton("RETURN TO MAIN MENU");
 		btnReturn.setOnMouseClicked(sukien -> {
 			Stage stage = (Stage) btnReturn.getScene().getWindow();
@@ -131,7 +157,10 @@ public class Main extends Application implements Battleship {
 					// Your class that extends Application
 					try {
 						new Menu().start(new Stage());
-						mediaPlayer.dispose();
+						startPlayer.dispose();
+						shipPlayer.dispose();
+						wonPlayer.dispose();
+						lostPlayer.dispose();
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -165,6 +194,10 @@ public class Main extends Application implements Battleship {
 			Board.Fade(ovuong);
 
 			if (player2.ships == 0) {
+				if (!Menu.isMute) {
+					startPlayer.stop();
+					lostPlayer.play();
+				}
 				ShowMessage("I'M SORRY!!! YOU JUST LOST THE GAME");
 				isWon = true;
 			}

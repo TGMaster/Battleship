@@ -28,13 +28,13 @@ public class Board extends Parent implements Battleship {
 	private VBox cot = new VBox();
 	
 	public class Elements extends Rectangle {
-		public int x, y; // T�?a độ của ô vuông
+		public int x, y; // Tọa độ của ô vuông
 		private Board board;
 		public Ship ship = null; // Khởi tạo object tàu
 		public boolean isFire = false; // Biến kiểm tra tàu bị bắn chưa
 		
 		public Elements(int a, int b, Board board) {
-			super(30, 30);	// Chi�?u dài ô vuông extends từ Rectangle
+			super(30, 30);	// Chiều dài ô vuông extends từ Rectangle
 			this.x = a;
 			this.y = b;
 			this.board = board;
@@ -60,9 +60,9 @@ public class Board extends Parent implements Battleship {
 	public Board(boolean Player, EventHandler<? super MouseEvent> handler) {
 		this.isBot = Player;
 		for (int y = 0; y < SQUARE; y++) {
-            HBox hang = new HBox(); // Sắp xếp trên 1 hàng
-            for (int x = 0; x < SQUARE; x++) {
-                Elements c = new Elements(x, y, this); // Tạo ô với t�?a độ x, y vào Board ngư�?i chơi này
+			 HBox hang = new HBox(); // Sắp xếp trên 1 hàng
+	            for (int x = 0; x < SQUARE; x++) {
+	                Elements c = new Elements(x, y, this); // Tạo ô với tọa độ x, y vào Board người chơi này
                 c.setOnMouseClicked(handler);
                 hang.getChildren().add(c);
             }
@@ -117,7 +117,6 @@ public class Board extends Parent implements Battleship {
                     return false;
 
                 
-                // New feature
                 // Không thể đặt tàu ở sát nhau
                 for (Elements tau : checkXungQuanh(x, i)) {
                     if (!isPlacable(x, i))
@@ -130,7 +129,7 @@ public class Board extends Parent implements Battleship {
         }
         else {
             for (int i = x; i < x + length; i++) {
-                if (!isPlacable(i, y)) // Nếu không đủ độ dài
+            	if (!isPlacable(i, y)) // Nếu không đủ độ dài
                     return false;
 
                 Elements cell = getLocation(i, y);
@@ -183,7 +182,7 @@ public class Board extends Parent implements Battleship {
             }
         }
 
-        return list.toArray(new Elements[0]);	// cast v�? array Elements
+        return list.toArray(new Elements[0]);	// cast về array Elements
     }
     
     public static void Fade(Elements ovuong) {

@@ -329,7 +329,13 @@ public class Menu extends Application implements Battleship {
 			DropShadow drop = new DropShadow(50, Color.WHITE);
 			drop.setInput(new Glow());
 
-			setOnMousePressed(event -> setEffect(drop));
+			setOnMousePressed(event -> {
+				String click_sound = "sound/click.mp3";
+				Media click = new Media(new File(click_sound).toURI().toString());
+				MediaPlayer click_mp3 = new MediaPlayer(click);
+				if (!isMute) click_mp3.play();
+				setEffect(drop);
+			});
 			setOnMouseReleased(event -> setEffect(null));
 		}
 	}

@@ -10,7 +10,7 @@ public class Ship extends Parent {
 
     public Ship(int a, boolean b) {
         this.type = a;
-        this.isVertical = b;	// Chuột trái = đặt tàu d�?c, các nút còn lại đặt tàu ngang
+        this.isVertical = b;	// Chuột trái = đặt tàu dọc, các nút còn lại đặt tàu ngang
         dodai = type;
     }
 
